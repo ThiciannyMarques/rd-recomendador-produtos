@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Preferences, Features, RecommendationType } from './Fields';
 import { SubmitButton } from './SubmitButton';
@@ -6,7 +5,7 @@ import useProducts from '../../hooks/useProducts';
 import useForm from '../../hooks/useForm';
 import useRecommendations from '../../hooks/useRecommendations';
 
-function Form({ onSetRecommendations }) {
+export default function Form({ onSetRecommendations }) {
   const { preferences, features, products, isLoading, error } = useProducts();
   const { formData, handleChange } = useForm({
     selectedPreferences: [],
@@ -18,7 +17,7 @@ function Form({ onSetRecommendations }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (error) {
       console.error('Error loading products:', error);
       return;
@@ -34,10 +33,7 @@ function Form({ onSetRecommendations }) {
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <form
-      className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md"
-      onSubmit={handleSubmit}
-    >
+    <form className="p-2 sticky" onSubmit={handleSubmit}>
       <Preferences
         preferences={preferences}
         onPreferenceChange={(selected) =>
@@ -51,8 +47,9 @@ function Form({ onSetRecommendations }) {
         }
       />
       <RecommendationType
-        onRecommendationTypeChange={(selected) =>
-          handleChange('selectedRecommendationType', selected)
+        selectedRecommendationType={formData.selectedRecommendationType}
+        onRecommendationTypeChange={(value) =>
+          handleChange('selectedRecommendationType', value)
         }
       />
       <SubmitButton text="Obter recomendação" disabled={isLoading} />
@@ -63,5 +60,3 @@ function Form({ onSetRecommendations }) {
 Form.propTypes = {
   onSetRecommendations: PropTypes.func.isRequired,
 };
-
-export default Form;

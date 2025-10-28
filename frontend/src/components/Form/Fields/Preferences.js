@@ -1,6 +1,4 @@
-// Preferences.js
-
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Checkbox from '../../shared/Checkbox';
 
 function Preferences({
@@ -8,34 +6,31 @@ function Preferences({
   selectedPreferences = [],
   onPreferenceChange,
 }) {
-  const [currentPreferences, setCurrentPreferences] = useState(selectedPreferences)
+  const [currentPreferences, setCurrentPreferences] =
+    useState(selectedPreferences);
 
-  const handlePreferenceChange = (preference) => {
-    const updatedPreferences = currentPreferences.includes(preference)
-      ? currentPreferences.filter((pref) => pref !== preference)
+  const handleChange = (preference) => {
+    const updated = currentPreferences.includes(preference)
+      ? currentPreferences.filter((p) => p !== preference)
       : [...currentPreferences, preference];
 
-    setCurrentPreferences(updatedPreferences);
-    onPreferenceChange(updatedPreferences);
+    setCurrentPreferences(updated);
+    onPreferenceChange(updated);
   };
 
   return (
     <div className="mb-4">
-      <h2 className="text-lg font-bold mb-2">Preferências:</h2>
-      <ul>
-        {preferences.map((preference, index) => (
-          <li key={index} className="mb-2">
-            <Checkbox
-              value={preference}
-              checked={currentPreferences.includes(preference)}
-              onChange={() => handlePreferenceChange(preference)}
-              className="text-blue-500"
-            >
-              {preference}
-            </Checkbox>
-          </li>
+      <h3 className="text-[#003D5C] font-semibold">Preferências:</h3>
+      <div className="space-y-3 mt-2">
+        {preferences.map((pref) => (
+          <Checkbox
+            key={pref}
+            label={pref}
+            checked={currentPreferences.includes(pref)}
+            onChange={() => handleChange(pref)}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

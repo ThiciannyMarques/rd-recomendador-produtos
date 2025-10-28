@@ -1,27 +1,51 @@
 import React from 'react';
-import Checkbox from '../../shared/Checkbox';
 
-function RecommendationType({ onRecommendationTypeChange }) {
+const Radio = ({ label, value, checked, onChange }) => (
+  <label className="flex items-center gap-3 cursor-pointer">
+    <input
+      type="radio"
+      className="sr-only"
+      value={value}
+      checked={checked}
+      onChange={onChange}
+    />
+    <div
+      className="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all"
+      style={{
+        borderColor: checked ? '#0000EE' : '#F1F3F5',
+        backgroundColor: '#FFF',
+      }}
+    >
+      {checked && <div className="w-2.5 h-2.5 rounded-full bg-[#0000EE]" />}
+    </div>
+    <span
+      className={`text-sm ${checked ? 'text-[#212429]' : 'text-[#636E7C]'}`}
+    >
+      {label}
+    </span>
+  </label>
+);
+
+function RecommendationType({
+  selectedRecommendationType,
+  onRecommendationTypeChange,
+}) {
   return (
     <div className="mb-4">
-      <h2 className="text-lg font-bold mb-2">Tipo de Recomendação:</h2>
-      <div className="flex items-center">
-        <Checkbox
-          type="radio"
-          name="recommendationType"
+      <h3 className="text-[#003D5C] font-semibold">Tipo de Recomendação:</h3>
+      <div className="space-y-3 mt-2">
+        <Radio
+          label="Produto Único"
           value="SingleProduct"
+          checked={selectedRecommendationType === 'SingleProduct'}
           onChange={() => onRecommendationTypeChange('SingleProduct')}
-          className="mr-2"
         />
-        <label htmlFor="SingleProduct" className="mr-4">Produto Único</label>
-        <Checkbox
-          type="radio"
-          name="recommendationType"
+        <Radio
+          label="Múltiplos Produtos"
           value="MultipleProducts"
+          checked={selectedRecommendationType === 'MultipleProducts'}
           onChange={() => onRecommendationTypeChange('MultipleProducts')}
-          className="mr-2"
         />
-        <label htmlFor="MultipleProducts">Múltiplos Produtos</label>
       </div>
     </div>
   );
