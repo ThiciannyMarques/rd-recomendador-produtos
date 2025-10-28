@@ -1,53 +1,66 @@
-/**
- * Returns recommended products based on user preferences and features
- * @param {Object} formData 
- * @param {Array} formData.selectedPreferences
- * @param {Array} formData.selectedFeatures
- * @param {string} formData.selectedRecommendationType
- * @param {Array} products
- * @returns {Array}
- */
-const getRecommendations = (formData = {}, products = []) => {
-  if (!Array.isArray(products)) {
-    console.error('Invalid products data');
-    return [];
-  }
+const VALID_RECOMMENDATION_TYPES = ['SingleProduct', 'MultipleProducts'];
 
-  const {
+const validateInputs = (products, recommendationType) => {
+  if (!Array.isArray(products)) throw new Error('Products deve ser um array');
+  if (typeof recommendationType !== 'string')
+    throw new Error('Tipo de recomendação inválido');
+  if (!VALID_RECOMMENDATION_TYPES.includes(recommendationType))
+    throw new Error('Tipo de recomendação inválido');
+};
+
+const scoreProduct = (product, preferenceSet, featureSet, index) => ({
+  ...product,
+  score:
+    (product.preferences?.filter((p) => preferenceSet.has(p)).length || 0) +
+    (product.features?.filter((f) => featureSet.has(f)).length || 0),
+  originalIndex: index,
+});
+
+const sortByScore = (type) => (a, b) => {
+  if (b.score !== a.score) return b.score - a.score;
+  return type === 'SingleProduct'
+    ? b.originalIndex - a.originalIndex
+    : a.originalIndex - b.originalIndex;
+};
+
+const getRecommendations = (
+  {
     selectedPreferences = [],
     selectedFeatures = [],
     selectedRecommendationType = '',
-  } = formData;
-
+  } = {},
+  products = []
+) => {
   if (!products.length || !selectedRecommendationType) return [];
 
-  const scoredProducts = products.map((product, originalIndex) => {
-    const preferenceMatches = product.preferences?.filter(pref =>
-      selectedPreferences.includes(pref)
-    ).length || 0;
+  try {
+    validateInputs(products, selectedRecommendationType);
 
-    const featureMatches = product.features?.filter(feat =>
-      selectedFeatures.includes(feat)
-    ).length || 0;
+    const preferenceSet = new Set(selectedPreferences);
+    const featureSet = new Set(selectedFeatures);
 
-    const totalScore = preferenceMatches + featureMatches;
+    const scored = products
+      .map((p, i) => scoreProduct(p, preferenceSet, featureSet, i))
+      .filter((p) => p.score > 0)
+      .sort(sortByScore(selectedRecommendationType));
 
-    return {
-      ...product,
-      score: totalScore,
-      originalIndex,
-    };
-  });
+    return selectedRecommendationType === 'SingleProduct'
+      ? scored.slice(0, 1)
+      : scored;
+  } catch (error) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error(
+        '[recommendationService] Erro ao gerar recomendações:',
+        error.message
+      );
+      throw error;
+    }
 
-  const relevantProducts = scoredProducts
-    .filter(product => product.score > 0)
-    .sort((a, b) => {
-      return b.score - a.score || a.originalIndex - b.originalIndex;
-    });
-
-  return selectedRecommendationType === 'SingleProduct'
-    ? relevantProducts.slice(0, 1)
-    : relevantProducts;
+    console.warn('[recommendationService] Erro tratado em produção');
+    return [];
+  }
 };
 
-export default { getRecommendations };
+const recommendationService = { getRecommendations };
+
+export default recommendationService;
