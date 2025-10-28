@@ -1,70 +1,198 @@
-# Getting Started with Create React App
+# Frontend - rd-recomendador-produtos
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este é o repositório do **frontend** do projeto. Ele foi desenvolvido utilizando **React 18**, **Tailwind CSS** e ferramentas de testes como **React Testing Library**. O objetivo deste README é fornecer instruções detalhadas para configurar, executar, desenvolver e testar o frontend de maneira simples e clara.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Sumário
 
-### `yarn start`
+* Estrutura do Projeto
+* Pré-requisitos
+* Instalação
+* Scripts Disponíveis
+* Configuração do Tailwind CSS
+* Estrutura de Componentes
+* Testes
+* Integração com o Backend
+* Dicas de Desenvolvimento
+* Referências
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Estrutura do Projeto
 
-### `yarn test`
+O frontend está localizado na pasta `frontend` do repo. A estrutura básica de arquivos é:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
 
-### `yarn build`
+frontend/
+├─ public/           \# Arquivos estáticos (HTML, favicon, etc.)
+├─ src/              \# Código-fonte React
+│ ├─ components      \# Componentes reutilizáveis em várias páginas
+│ ├─ hooks           \# Hooks customizados para lógica de estado e efeitos
+│ ├─ services        \# Serviços de API e integrações externas
+│ ├─ mocks           \# Dados e respostas simuladas para testes e desenvolvimento
+│  └─ index.js       \# Entrada principal do React
+├─ package.json      \# Dependências e scripts do frontend
+├─ tailwind.config.js\# Configuração do Tailwind CSS
+└─ README.md
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+````
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Pré-requisitos
 
-### `yarn eject`
+Antes de iniciar, certifique-se de ter instalado:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* **Node.js** >= 18
+* **Yarn** >= 1.22
+* (Opcional) **npm** se preferir usar npm para alguns comandos.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> O frontend está configurado para funcionar dentro do **monorepo**, mas também pode ser executado isoladamente.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Instalação
 
-## Learn More
+Para instalar as dependências do frontend, navegue até a pasta e execute:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+cd frontend
+yarn install
+````
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Isso instalará todas as dependências necessárias, incluindo React, Tailwind CSS e ferramentas de teste.
 
-### Code Splitting
+## Scripts Disponíveis
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+No diretório `frontend`, você pode executar os seguintes comandos:
 
-### Analyzing the Bundle Size
+### 1\. Iniciar o projeto em modo de desenvolvimento
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+yarn start
+```
 
-### Making a Progressive Web App
+Abre o aplicativo em `http://localhost:3000` automaticamente.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+  * Suporta *hot reload*: alterações no código são refletidas em tempo real.
+  * Qualquer erro de lint ou console será exibido durante a execução.
 
-### Advanced Configuration
+### 2\. Testes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+yarn test
+```
 
-### Deployment
+Executa os testes interativos usando React Testing Library e Jest.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+  * Permite rodar testes individualmente ou observar mudanças automaticamente.
 
-### `yarn build` fails to minify
+### 3\. Build para produção
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+yarn build
+```
+
+Gera a versão otimizada do frontend na pasta `build/`.
+
+  * Faz minificação do código e otimização de performance.
+  * Pronto para deploy em qualquer servidor.
+
+### 4\. Linting
+
+```bash
+yarn lint
+```
+
+Verifica problemas de estilo e boas práticas no código usando ESLint.
+
+```bash
+yarn lint:fix
+```
+
+Corrige automaticamente problemas de lint que puder resolver.
+
+### 5\. Eject (opcional)
+
+```bash
+yarn eject
+```
+
+**Aviso:** este comando é irreversível. Ele expõe toda a configuração do `react-scripts` para edição manual. Só utilize se realmente precisar customizar Webpack, Babel ou ESLint.
+
+-----
+
+## Configuração do Tailwind CSS
+
+O Tailwind CSS já está integrado. Você pode customizar as cores, fontes e estilos no arquivo `tailwind.config.js`. Por padrão, ele já inclui:
+
+  * Suporte a JIT (Just-In-Time)
+  * Purge automático de CSS não utilizado
+  * Integração com PostCSS e autoprefixer
+
+Para adicionar classes Tailwind em seus componentes, basta importar o CSS principal em `src/index.css`:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+-----
+
+## Estrutura de Componentes
+
+  * **Components**: Componentes pequenos e reutilizáveis, como botões, cards e inputs.
+  * **Hooks**: Hooks customizados para lógica de estado e efeitos.
+  * **Services**: Funções de integração com APIs ou lógica de dados.
+  * **Mocks**: Dados e respostas simuladas para testes e desenvolvimento.
+-----
+
+## Testes
+
+O frontend possui testes configurados com React Testing Library. Recomenda-se escrever testes para:
+
+  * Validação de formulários
+  * Renderização de componentes
+  * Integração com serviços e chamadas API
+  * Comportamentos interativos do usuário
+
+Exemplo de execução de teste:
+
+```bash
+yarn test
+```
+
+-----
+
+## Integração com o Backend
+
+No repo, o frontend pode ser executado em conjunto com o backend. A partir do diretório raiz (`root`):
+
+```bash
+cd ..
+yarn dev
+```
+
+Este comando executa frontend e backend simultaneamente, usando `concurrently`. O frontend continuará disponível em `http://localhost:3000`.
+
+-----
+
+## Dicas de Desenvolvimento
+
+  * **Mobile First**: Todo o layout foi pensado para mobile primeiro, garantindo responsividade.
+  * **Componentização**: Reutilize componentes e mantenha-os desacoplados.
+  * **Linting constante**: Execute `yarn lint` frequentemente para manter código limpo.
+  * **Testes sempre**: Garanta que novos componentes tenham cobertura mínima de testes.
+  * **Tailwind Utilities**: Prefira classes utilitárias para manter consistência e rapidez no desenvolvimento.
+
+-----
+
+## Referências
+
+  * [Documentação React](https://www.google.com/search?q=https://reactjs.org/docs/getting-started.html)
+  * [Create React App](https://www.google.com/search?q=https://create-react-app.dev/)
+  * [Tailwind CSS](https://tailwindcss.com/docs)
+  * [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
